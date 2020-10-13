@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ToDo from "./ToDo";
 
 const ToDoList = () => {
@@ -7,41 +7,94 @@ const ToDoList = () => {
 	// this for a our list of todos
 	const [todos, setTodos] = useState([]);
 
+	useEffect(() => {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/vicehhf")
+			.then(function(response) {
+				if (!response.ok) {
+					throw Error(response.statusText);
+				}
+				return response.json();
+			})
+			.then(function(responseAsJson) {
+				setTodos(responseAsJson);
+			})
+			.catch(function(error) {
+				console.log("Looks like there was a problem: \n", error);
+			});
+	}, []);
+
 	const handleChange = e => {
-		setSingleTodo({ [e.target.name]: e.target.value });
+		setSingleTodo({ label: e.target.value, done: false });
 	};
 
 	const handleClick = e => {
-		setTodos([...todos, singleTodo]);
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/vicehhf", {
+			method: "PUT", // or 'POST'
+			body: JSON.stringify(todos.concat(singleTodo)), // data can be `string` or {object}!
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(response => console.log("Success:", response))
+			.catch(error => console.error("Error:", error));
+
+		setTodos(todos.concat(singleTodo));
+		setSingleTodo({ label: "", done: false });
 	};
 
-	const deleteTodo = indice => {
+	const deleteTodo = ind => {
+		var newTodos = todos.filter((task, index) => {
+			return index != ind;
+		});
+		console.log(newTodos);
+		setTodos(newTodos);
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/vicehhf", {
+			method: "PUT", // or 'POST'
+			body: JSON.stringify(newTodos), // data can be `string` or {object}!
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(response => console.log("Success:", response))
+			.catch(error => console.error("Error:", error));
+	};
+
+	const deleteAllTodos = indice => {
 		const newTodos = [...todos];
-		newTodos.splice(indice, 1);
+		newTodos.splice(indice, todos.length);
 		setTodos(newTodos);
 	};
 
 	return (
-		<>
+		<div className="container">
 			<form onSubmit={e => e.preventDefault()}>
 				<input
+					id="userInput"
 					onChange={handleChange}
 					type="text"
 					name="todo"
 					placeholder="Stop being lazy and JUST DO IT!!"
+					value={singleTodo.label}
 				/>
-				<button onClick={handleClick}>SUBMIT</button>
+				<button onClick={handleClick}>
+					<strong>SUBMIT</strong>
+				</button>
+				<button onClick={deleteAllTodos}>
+					<strong>CLEAR</strong>
+				</button>
 			</form>
-			{todos.map((value, index) => (
+			{todos.map((task, index) => (
 				<ToDo
-					todo={value.todo}
+					todo={task}
 					key={index}
 					index={index}
 					deleteTodo={deleteTodo}
 				/>
 			))}
 			<div className="item-counter">{todos.length} items </div>
-		</>
+		</div>
 	);
 };
 

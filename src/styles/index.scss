@@ -1,15 +1,39 @@
 @import "~bootstrap/scss/bootstrap.scss";
 body {
-    background: rgb(253, 240, 240);
+    background: rgb(247, 217, 217);
 }
 .heading {
     font-size: 120px;
-    color: rgba(125, 228, 247, 0.664);
+    color: rgba(103, 225, 247, 0.664);
 }
-.listItems {
-    list-style: none;
-    margin: auto;
-     width: 400px;
-    padding: 10px;
-    padding-left: 40px;  
+// .listItems {
+//     list-style: none;
+//     margin: auto;
+//      width: 400px;
+//     padding: 10px;
+//     padding-left: 40px;  
+// }
+
+#userInput {
+    width: 400px;
+    padding: 5px;
 }
+
+.btn-delete {
+    height: 32px;
+    border-radius: 50%;
+}
+
+button {
+    height: 38px;
+    background-color: rgb(228, 177, 243);
+    color: rgb(26, 126, 126);
+    font-size: 18px;
+}
+
+// .container {
+//     margin-top: 50px;
+//     background: rgb(243, 211, 211);
+//     padding-bottom: 50px;
+//     box-shadow: 10px 10px 15px rgb(228, 177, 243);
+// }
