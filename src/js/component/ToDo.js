@@ -8,7 +8,7 @@ const ToDo = ({ todo, index, deleteTodo }) => {
 				<h5 className="text-left">{todo.label}</h5>
 				<button
 					className="btn-delete"
-					onClick={() => deleteTodo(index)}>
+					onClick={() => deleteTodo(todo.id)}>
 					<i className="fas fa-times" />
 				</button>
 			</div>
